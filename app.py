@@ -1,9 +1,9 @@
 
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from forms import LoginForm, RegisterForm
 from models import User, db
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/flask'
@@ -55,6 +55,14 @@ def signup():
 @login_required
 def dashboard():
     return render_template('dashboard.html', name=current_user.username)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
